@@ -2,15 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:quiz_app/styles/widgetStyles.dart';
 
 class Quiz extends StatefulWidget {
-  final String quizCategory;
-
-  Quiz({this.quizCategory});
+  final String quizCategoryKey;
+  final String quizCategoryValue;
+  final String quizDifficulty;
+  Quiz({this.quizCategoryKey, this.quizCategoryValue, this.quizDifficulty});
   @override
   _QuizState createState() => _QuizState();
 }
 
 class _QuizState extends State<Quiz> {
   int questionNumber = 1;
+
+  void incrementQuestinNumber() {
+    setState(() {
+      questionNumber++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +27,8 @@ class _QuizState extends State<Quiz> {
         elevation: 0,
         backgroundColor: Color(0XFFF3F3F4),
         title: Text(
-          'General Knowledge',
+          // 'General Knowledge',
+          widget.quizCategoryValue,
           style: TextStyle(color: Colors.black87),
         ),
         centerTitle: true,
@@ -84,9 +93,13 @@ class _QuizState extends State<Quiz> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         WidgetStyles.answerBtn(
-                            context: context, text: 'true', pressedFunc: null),
+                            context: context,
+                            text: 'true',
+                            pressedFunc: incrementQuestinNumber),
                         WidgetStyles.answerBtn(
-                            context: context, text: 'false', pressedFunc: null),
+                            context: context,
+                            text: 'false',
+                            pressedFunc: incrementQuestinNumber),
                       ],
                     ),
                   ],

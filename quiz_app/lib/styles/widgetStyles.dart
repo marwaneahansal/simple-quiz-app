@@ -44,7 +44,7 @@ class WidgetStyles {
             child: Container(
               height: 8,
               width: MediaQuery.of(context).size.width,
-              color: Colors.lightBlue,
+              color: Colors.white,
             ),
           ),
         ],

@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/quizScreen.dart';
 import 'package:quiz_app/styles/widgetStyles.dart';
-import 'package:quiz_app/widgets/dropDownMenu.dart';
 
 class QuizSelection extends StatefulWidget {
-  @override
-  _QuizSelectionState createState() => _QuizSelectionState();
-}
-
-class _QuizSelectionState extends State<QuizSelection> {
-  Map<String, String> catDropDownItems = {
+  final Map<String, String> catDropDownItems = {
     '9': 'General knowledge',
     '10': 'Books',
     '11': 'Film',
@@ -20,7 +14,25 @@ class _QuizSelectionState extends State<QuizSelection> {
     '18': 'Computers'
   };
 
-  List<String> difficultyDropDownItems = ['Easy', 'Meduim', 'Hard'];
+  final List<String> difficultyDropDownItems = ['Easy', 'Meduim', 'Hard'];
+
+  @override
+  _QuizSelectionState createState() => _QuizSelectionState();
+}
+
+class _QuizSelectionState extends State<QuizSelection> {
+  String categoryValue;
+  List<String> categoryNames;
+  String difficultyValue;
+  String categoryCode;
+
+  @override
+  void initState() {
+    this.categoryNames = widget.catDropDownItems.values.toList();
+    this.categoryValue = this.categoryNames[0];
+    this.difficultyValue = widget.difficultyDropDownItems[0];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +50,30 @@ class _QuizSelectionState extends State<QuizSelection> {
                     'Select category:',
                     style: WidgetStyles.labelTextStyle,
                   ),
-                  DropDownWidget(
-                    dropDownItems: catDropDownItems,
+                  DropdownButton(
+                    isExpanded: true,
+                    value: this.categoryValue,
+                    icon: Icon(Icons.arrow_drop_down),
+                    underline: Container(
+                      height: 2,
+                      color: Color(0XFF364f6b),
+                    ),
+                    items: this.categoryNames.map((value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String value) {
+                      String key = widget.catDropDownItems.keys.firstWhere(
+                          (element) =>
+                              widget.catDropDownItems[element] == value,
+                          orElse: () => null);
+                      setState(() {
+                        this.categoryValue = value;
+                        this.categoryCode = key;
+                      });
+                    },
                   ),
                 ]),
                 SizedBox(
@@ -50,9 +84,26 @@ class _QuizSelectionState extends State<QuizSelection> {
                     'Select difficulty:',
                     style: WidgetStyles.labelTextStyle,
                   ),
-                  DifficultyDropDownMenu(
-                    diffcultyItems: difficultyDropDownItems,
-                  )
+                  DropdownButton(
+                    isExpanded: true,
+                    value: this.difficultyValue,
+                    icon: Icon(Icons.arrow_drop_down),
+                    underline: Container(
+                      height: 2,
+                      color: Color(0XFF364f6b),
+                    ),
+                    items: widget.difficultyDropDownItems.map((value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String value) {
+                      setState(() {
+                        this.difficultyValue = value;
+                      });
+                    },
+                  ),
                 ]),
                 SizedBox(
                   height: 16,
@@ -66,7 +117,9 @@ class _QuizSelectionState extends State<QuizSelection> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Quiz(
-                          quizCategory: 'Genral Knowledge',
+                          quizCategoryKey: this.categoryCode,
+                          quizDifficulty: this.difficultyValue,
+                          quizCategoryValue: this.categoryValue,
                         ),
                       ),
                     );
