@@ -65,7 +65,9 @@ class _QuizSelectionState extends State<QuizSelection> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Quiz(),
+                        builder: (context) => Quiz(
+                          quizCategory: 'Genral Knowledge',
+                        ),
                       ),
                     );
                   },

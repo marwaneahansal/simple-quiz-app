@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/styles/widgetStyles.dart';
 
 class Quiz extends StatefulWidget {
+  final String quizCategory;
+
+  Quiz({this.quizCategory});
   @override
   _QuizState createState() => _QuizState();
 }
@@ -12,6 +16,7 @@ class _QuizState extends State<Quiz> {
     return Scaffold(
       backgroundColor: Color(0XFFF3F3F4),
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Color(0XFFF3F3F4),
         title: Text(
           'General Knowledge',
@@ -28,19 +33,22 @@ class _QuizState extends State<Quiz> {
             Navigator.pop(context);
           },
         ),
+        bottom: PreferredSize(
+            child: WidgetStyles.questionIndicator(context: context),
+            preferredSize: Size.fromHeight(6)),
       ),
       body: Container(
         padding: EdgeInsets.only(top: 16),
         child: Column(
           children: [
             Center(
-              child: Text(
-                'Question $questionNumber',
-                style: TextStyle(fontSize: 24),
+              child: Container(
+                padding: EdgeInsets.all(32),
+                child: Text(
+                  'Question $questionNumber',
+                  style: TextStyle(fontSize: 24),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 50,
             ),
             Expanded(
               child: Container(
@@ -50,6 +58,38 @@ class _QuizState extends State<Quiz> {
                     topRight: Radius.circular(30),
                   ),
                   color: Colors.lightBlue,
+                ),
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        'The question asked??',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      // mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        WidgetStyles.answerBtn(
+                            context: context, text: 'true', pressedFunc: null),
+                        WidgetStyles.answerBtn(
+                            context: context, text: 'false', pressedFunc: null),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
