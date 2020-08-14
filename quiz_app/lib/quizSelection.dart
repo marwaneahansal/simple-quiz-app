@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/quizScreen.dart';
 import 'package:quiz_app/styles/widgetStyles.dart';
 import 'package:quiz_app/widgets/dropDownMenu.dart';
 
@@ -60,7 +61,14 @@ class _QuizSelectionState extends State<QuizSelection> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Quiz(),
+                      ),
+                    );
+                  },
                   color: Color(0xFF6C63FF),
                   textColor: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
