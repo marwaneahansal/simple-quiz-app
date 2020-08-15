@@ -16,13 +16,14 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   final controller = PageController(initialPage: 0);
-  int questionNumber = 1;
+  int questionNumber;
   Future<QuestionAnswers> questionAnswers;
 
   Future<QuestionAnswers> _getQuistionsAndAnswers() async {
     final result = await http.get(
-        'https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=boolean');
-
+        'https://opentdb.com/api.php?amount=10&category=${widget.quizCategoryKey}&difficulty=${widget.quizDifficulty.toLowerCase()}&type=boolean');
+    print(
+        'https://opentdb.com/api.php?amount=10&category=${widget.quizCategoryKey}&difficulty=${widget.quizDifficulty.toLowerCase()}&type=boolean');
     if (result.statusCode == 200) {
       return QuestionAnswers.fromJson(json.decode(result.body));
     }
@@ -32,9 +33,7 @@ class _QuizState extends State<Quiz> {
   @override
   void initState() {
     questionAnswers = _getQuistionsAndAnswers();
-    questionAnswers.then((value) {
-      value.questions.forEach((value) => print('question is: $value'));
-    });
+    questionNumber = controller.initialPage + 1;
     super.initState();
   }
 
@@ -62,7 +61,8 @@ class _QuizState extends State<Quiz> {
           },
         ),
         bottom: PreferredSize(
-            child: WidgetStyles.questionIndicator(context: context),
+            child: WidgetStyles.questionIndicator(
+                context: context, questionNumber: questionNumber),
             preferredSize: Size.fromHeight(6)),
       ),
       body: FutureBuilder<QuestionAnswers>(
@@ -100,6 +100,12 @@ class _QuizState extends State<Quiz> {
                             context: context,
                             question: snapshot.data.questions[index],
                           );
+                        },
+                        controller: controller,
+                        onPageChanged: (value) {
+                          setState(() {
+                            questionNumber = value + 1;
+                          });
                         },
                       ),
                     ),

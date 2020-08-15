@@ -4,7 +4,7 @@ import 'package:quiz_app/styles/widgetStyles.dart';
 
 class QuizSelection extends StatefulWidget {
   final Map<String, String> catDropDownItems = {
-    '9': 'General knowledge',
+    '9': 'General Knowledge',
     '10': 'Books',
     '11': 'Film',
     '12': 'Music',
@@ -14,7 +14,7 @@ class QuizSelection extends StatefulWidget {
     '18': 'Computers'
   };
 
-  final List<String> difficultyDropDownItems = ['Easy', 'Meduim', 'Hard'];
+  final List<String> difficultyDropDownItems = ['Easy', 'Medium', 'Hard'];
 
   @override
   _QuizSelectionState createState() => _QuizSelectionState();
@@ -31,6 +31,7 @@ class _QuizSelectionState extends State<QuizSelection> {
     this.categoryNames = widget.catDropDownItems.values.toList();
     this.categoryValue = this.categoryNames[0];
     this.difficultyValue = widget.difficultyDropDownItems[0];
+    this.categoryCode = '9';
     super.initState();
   }
 

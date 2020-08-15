@@ -29,7 +29,7 @@ class WidgetStyles {
     );
   }
 
-  static Widget questionIndicator({BuildContext context}) {
+  static Widget questionIndicator({BuildContext context, int questionNumber}) {
     return Container(
       color: Colors.transparent,
       child: Row(
@@ -37,7 +37,7 @@ class WidgetStyles {
         children: [
           Container(
             height: 8,
-            width: MediaQuery.of(context).size.width / 10,
+            width: MediaQuery.of(context).size.width * (questionNumber / 10),
             color: Colors.deepPurple,
           ),
           Expanded(
