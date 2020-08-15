@@ -65,51 +65,71 @@ class _QuizState extends State<Quiz> {
             child: WidgetStyles.questionIndicator(context: context),
             preferredSize: Size.fromHeight(6)),
       ),
-      body: Container(
-        padding: EdgeInsets.only(top: 16),
-        child: Column(
-          children: [
-            Center(
-              child: Container(
-                padding: EdgeInsets.all(32),
-                child: Text(
-                  'Question $questionNumber',
-                  style: TextStyle(fontSize: 24),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+      body: FutureBuilder<QuestionAnswers>(
+        future: questionAnswers,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              padding: EdgeInsets.only(top: 16),
+              child: Column(
+                children: [
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.all(32),
+                      child: Text(
+                        'Question $questionNumber',
+                        style: TextStyle(fontSize: 24),
+                      ),
+                    ),
                   ),
-                  color: Colors.lightBlue,
-                ),
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(16),
-                // child: PageView(
-                //   controller: controller,
-                //   children: [
-                //     FutureBuilder<QuestionAnswers>(
-                //       future: questionAnswers,
-                //       builder: (context, snapshot) {
-                //         if (snapshot.hasData) {
-                //           return WidgetStyles.questionsWidget(
-                //               context: context,
-                //               question: snapshot.data.question);
-                //         }
-                //         return CircularProgressIndicator();
-                //       },
-                //     ),
-                //   ],
-                // ),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                        color: Colors.lightBlue,
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.all(16),
+                      child: PageView.builder(
+                        itemCount: snapshot.data.questions.length,
+                        itemBuilder: (context, index) {
+                          return WidgetStyles.questionsWidget(
+                            context: context,
+                            question: snapshot.data.questions[index],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }
 }
+
+// PageView(
+//                   controller: controller,
+//                   children: [
+//                     FutureBuilder<QuestionAnswers>(
+//                       future: questionAnswers,
+//                       builder: (context, snapshot) {
+//                         if (snapshot.hasData) {
+//                           return WidgetStyles.questionsWidget(
+//                               context: context,
+//                               question: snapshot.data.questions);
+//                         }
+//                         return CircularProgressIndicator();
+//                       },
+//                     ),
+//                   ],
+//                 ),
