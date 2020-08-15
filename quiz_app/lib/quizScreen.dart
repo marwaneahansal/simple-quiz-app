@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:quiz_app/schemas/questionsAnswers.dart';
 import 'package:quiz_app/styles/widgetStyles.dart';
 
 class Quiz extends StatefulWidget {
@@ -11,12 +15,27 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
+  final controller = PageController(initialPage: 0);
   int questionNumber = 1;
+  Future<QuestionAnswers> questionAnswers;
 
-  void incrementQuestinNumber() {
-    setState(() {
-      questionNumber++;
+  Future<QuestionAnswers> _getQuistionsAndAnswers() async {
+    final result = await http.get(
+        'https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=boolean');
+
+    if (result.statusCode == 200) {
+      return QuestionAnswers.fromJson(json.decode(result.body));
+    }
+    throw Exception('Failed to load data from the server');
+  }
+
+  @override
+  void initState() {
+    questionAnswers = _getQuistionsAndAnswers();
+    questionAnswers.then((value) {
+      value.questions.forEach((value) => print('question is: $value'));
     });
+    super.initState();
   }
 
   @override
@@ -70,40 +89,22 @@ class _QuizState extends State<Quiz> {
                 ),
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: Text(
-                        'The question asked??',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Row(
-                      // mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        WidgetStyles.answerBtn(
-                            context: context,
-                            text: 'true',
-                            pressedFunc: incrementQuestinNumber),
-                        WidgetStyles.answerBtn(
-                            context: context,
-                            text: 'false',
-                            pressedFunc: incrementQuestinNumber),
-                      ],
-                    ),
-                  ],
-                ),
+                // child: PageView(
+                //   controller: controller,
+                //   children: [
+                //     FutureBuilder<QuestionAnswers>(
+                //       future: questionAnswers,
+                //       builder: (context, snapshot) {
+                //         if (snapshot.hasData) {
+                //           return WidgetStyles.questionsWidget(
+                //               context: context,
+                //               question: snapshot.data.question);
+                //         }
+                //         return CircularProgressIndicator();
+                //       },
+                //     ),
+                //   ],
+                // ),
               ),
             ),
           ],

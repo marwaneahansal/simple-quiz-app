@@ -51,4 +51,41 @@ class WidgetStyles {
       ),
     );
   }
+
+  static Widget questionsWidget({BuildContext context, String question}) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Text(
+            question,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 25,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        Row(
+          // mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            WidgetStyles.answerBtn(
+              context: context,
+              text: 'true',
+            ),
+            WidgetStyles.answerBtn(
+              context: context,
+              text: 'false',
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 }
