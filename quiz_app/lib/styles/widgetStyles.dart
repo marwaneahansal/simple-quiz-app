@@ -88,4 +88,20 @@ class WidgetStyles {
       ],
     );
   }
+
+  static Widget offlineConnectionDialog({BuildContext context}) {
+    return AlertDialog(
+      title: Text('No Internet connection'),
+      content: Text('You need Internet Connection to continue'),
+      actions: [
+        FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('Ok'),
+        ),
+      ],
+      elevation: 24,
+    );
+  }
 }

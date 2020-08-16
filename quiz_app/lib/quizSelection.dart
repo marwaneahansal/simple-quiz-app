@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quiz_app/quizScreen.dart';
+import 'package:quiz_app/schemas/connectivity_status.dart';
 import 'package:quiz_app/styles/widgetStyles.dart';
 
 class QuizSelection extends StatefulWidget {
@@ -37,6 +39,11 @@ class _QuizSelectionState extends State<QuizSelection> {
 
   @override
   Widget build(BuildContext context) {
+    var connectionState = Provider.of<ConnectivityStatus>(context);
+
+    // if (connectionState == ConnectivityStatus.Offline) {
+
+    // }
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0XFFF3F3F4),
@@ -114,16 +121,18 @@ class _QuizSelectionState extends State<QuizSelection> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Quiz(
-                          quizCategoryKey: this.categoryCode,
-                          quizDifficulty: this.difficultyValue,
-                          quizCategoryValue: this.categoryValue,
-                        ),
-                      ),
-                    );
+                    connectionState == ConnectivityStatus.Offline
+                        ? offlineConnection(context: context)
+                        : Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Quiz(
+                                quizCategoryKey: this.categoryCode,
+                                quizDifficulty: this.difficultyValue,
+                                quizCategoryValue: this.categoryValue,
+                              ),
+                            ),
+                          );
                   },
                   color: Color(0xFF6C63FF),
                   textColor: Colors.white,
@@ -138,6 +147,15 @@ class _QuizSelectionState extends State<QuizSelection> {
           ),
         ),
       ),
+    );
+  }
+
+  offlineConnection({BuildContext context}) {
+    showDialog(
+      context: context,
+      builder: (context) =>
+          WidgetStyles.offlineConnectionDialog(context: context),
+      barrierDismissible: false,
     );
   }
 }

@@ -122,20 +122,3 @@ class _QuizState extends State<Quiz> {
     );
   }
 }
-
-// PageView(
-//                   controller: controller,
-//                   children: [
-//                     FutureBuilder<QuestionAnswers>(
-//                       future: questionAnswers,
-//                       builder: (context, snapshot) {
-//                         if (snapshot.hasData) {
-//                           return WidgetStyles.questionsWidget(
-//                               context: context,
-//                               question: snapshot.data.questions);
-//                         }
-//                         return CircularProgressIndicator();
-//                       },
-//                     ),
-//                   ],
-//                 ),
