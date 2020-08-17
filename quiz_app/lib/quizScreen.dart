@@ -18,12 +18,12 @@ class _QuizState extends State<Quiz> {
   final controller = PageController(initialPage: 0);
   int questionNumber;
   Future<QuestionAnswers> questionAnswers;
+  Map<String, String> userAnswers = Map<String, String>();
 
   Future<QuestionAnswers> _getQuistionsAndAnswers() async {
     final result = await http.get(
         'https://opentdb.com/api.php?amount=10&category=${widget.quizCategoryKey}&difficulty=${widget.quizDifficulty.toLowerCase()}&type=boolean');
-    print(
-        'https://opentdb.com/api.php?amount=10&category=${widget.quizCategoryKey}&difficulty=${widget.quizDifficulty.toLowerCase()}&type=boolean');
+
     if (result.statusCode == 200) {
       return QuestionAnswers.fromJson(json.decode(result.body));
     }
@@ -94,15 +94,19 @@ class _QuizState extends State<Quiz> {
                       width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.all(16),
                       child: PageView.builder(
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: snapshot.data.questions.length,
                         itemBuilder: (context, index) {
                           return WidgetStyles.questionsWidget(
                             context: context,
                             question: snapshot.data.questions[index],
+                            trueAnswer: _trueAnswer,
+                            flaseAnswer: _falseAnswer,
                           );
                         },
                         controller: controller,
                         onPageChanged: (value) {
+                          print(userAnswers);
                           setState(() {
                             questionNumber = value + 1;
                           });
@@ -119,6 +123,34 @@ class _QuizState extends State<Quiz> {
           );
         },
       ),
+    );
+  }
+
+  void _trueAnswer() {
+    if (questionNumber == 10) {
+      userAnswers[(questionNumber - 1).toString()] = "true";
+      // TODO: Naviagtion to score page
+      print('Next page');
+    } else {
+      userAnswers[(questionNumber - 1).toString()] = "true";
+    }
+    controller.nextPage(
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _falseAnswer() {
+    if (questionNumber == 10) {
+      userAnswers[(questionNumber - 1).toString()] = "false";
+      // TODO: Naviagtion to score page
+      print('Next page');
+    } else {
+      userAnswers[(questionNumber - 1).toString()] = "false";
+    }
+    controller.nextPage(
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeOut,
     );
   }
 }

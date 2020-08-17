@@ -8,7 +8,7 @@ class WidgetStyles {
   );
 
   static Widget answerBtn(
-      {BuildContext context, String text, Function pressedFunc}) {
+      {BuildContext context, String text, VoidCallback pressedFunc}) {
     return RaisedButton(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(40),
@@ -52,7 +52,11 @@ class WidgetStyles {
     );
   }
 
-  static Widget questionsWidget({BuildContext context, String question}) {
+  static Widget questionsWidget(
+      {BuildContext context,
+      String question,
+      VoidCallback trueAnswer,
+      VoidCallback flaseAnswer}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -76,13 +80,9 @@ class WidgetStyles {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             WidgetStyles.answerBtn(
-              context: context,
-              text: 'true',
-            ),
+                context: context, text: 'true', pressedFunc: trueAnswer),
             WidgetStyles.answerBtn(
-              context: context,
-              text: 'false',
-            ),
+                context: context, text: 'false', pressedFunc: flaseAnswer),
           ],
         ),
       ],
