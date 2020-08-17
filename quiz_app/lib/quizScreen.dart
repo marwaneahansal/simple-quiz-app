@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:quiz_app/schemas/questionsAnswers.dart';
+import 'package:quiz_app/score.dart';
 import 'package:quiz_app/styles/widgetStyles.dart';
 
 class Quiz extends StatefulWidget {
@@ -129,8 +130,21 @@ class _QuizState extends State<Quiz> {
   void _trueAnswer() {
     if (questionNumber == 10) {
       userAnswers[(questionNumber - 1).toString()] = "true";
-      // TODO: Naviagtion to score page
-      print('Next page');
+      List<String> questions;
+      List<String> correctAnswers;
+      questionAnswers.then((value) {
+        questions = value.questions;
+        correctAnswers = value.correctAnswers;
+      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Score(
+                  questions: questions,
+                  correctAnswer: correctAnswers,
+                  userAnswers: userAnswers,
+                )),
+      );
     } else {
       userAnswers[(questionNumber - 1).toString()] = "true";
     }
@@ -143,8 +157,21 @@ class _QuizState extends State<Quiz> {
   void _falseAnswer() {
     if (questionNumber == 10) {
       userAnswers[(questionNumber - 1).toString()] = "false";
-      // TODO: Naviagtion to score page
-      print('Next page');
+      List<String> questions;
+      List<String> correctAnswers;
+      questionAnswers.then((value) {
+        questions = value.questions;
+        correctAnswers = value.correctAnswers;
+      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Score(
+                  questions: questions,
+                  correctAnswer: correctAnswers,
+                  userAnswers: userAnswers,
+                )),
+      );
     } else {
       userAnswers[(questionNumber - 1).toString()] = "false";
     }
