@@ -128,6 +128,7 @@ class _QuizState extends State<Quiz> {
   }
 
   void _trueAnswer() {
+    List getScore;
     if (questionNumber == 10) {
       userAnswers[(questionNumber - 1).toString()] = "true";
       List<String> questions;
@@ -135,7 +136,9 @@ class _QuizState extends State<Quiz> {
       questionAnswers.then((value) {
         questions = value.questions;
         correctAnswers = value.correctAnswers;
+        getScore = calculeScore(userAnswers, correctAnswers);
       });
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -143,6 +146,7 @@ class _QuizState extends State<Quiz> {
                   questions: questions,
                   correctAnswer: correctAnswers,
                   userAnswers: userAnswers,
+                  score: getScore,
                 )),
       );
     } else {
@@ -155,6 +159,8 @@ class _QuizState extends State<Quiz> {
   }
 
   void _falseAnswer() {
+    List getScore;
+
     if (questionNumber == 10) {
       userAnswers[(questionNumber - 1).toString()] = "false";
       List<String> questions;
@@ -162,6 +168,7 @@ class _QuizState extends State<Quiz> {
       questionAnswers.then((value) {
         questions = value.questions;
         correctAnswers = value.correctAnswers;
+        getScore = calculeScore(userAnswers, correctAnswers);
       });
       Navigator.pushReplacement(
         context,
@@ -170,14 +177,32 @@ class _QuizState extends State<Quiz> {
                   questions: questions,
                   correctAnswer: correctAnswers,
                   userAnswers: userAnswers,
+                  score: getScore,
                 )),
       );
     } else {
       userAnswers[(questionNumber - 1).toString()] = "false";
     }
     controller.nextPage(
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 400),
       curve: Curves.easeOut,
     );
+  }
+
+  List<dynamic> calculeScore(
+      Map<String, String> userAnswers, List<String> correctAnswers) {
+    int correctAnswersCount = 0;
+    List<int> rightAnswers = [];
+    List<String> userAnswersList = userAnswers.values.toList();
+    for (int i = 0; i < userAnswersList.length; i++) {
+      // print('user Answer: ${userAnswersList[i]}');
+      // print('correct Answer: ${correctAnswers[i]}');
+      if (userAnswersList[i].toLowerCase() == correctAnswers[i].toLowerCase()) {
+        rightAnswers.add(i);
+        correctAnswersCount++;
+      }
+      // print('score: $correctAnswersCount');
+    }
+    return [correctAnswersCount, rightAnswers];
   }
 }

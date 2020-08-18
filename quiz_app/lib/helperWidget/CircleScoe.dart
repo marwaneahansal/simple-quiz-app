@@ -11,13 +11,13 @@ class CircleProgress extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint outerCircle = Paint()
       ..strokeWidth = 7
-      ..color = Colors.black
+      ..color = Colors.white
       ..style = PaintingStyle.stroke;
 
     Paint completArc = Paint()
       ..strokeWidth = 7
       ..style = PaintingStyle.stroke
-      ..color = Colors.redAccent
+      ..color = correctAnswers >= 5 ? Colors.green : Colors.red
       ..strokeCap = StrokeCap.round;
 
     Offset center = Offset(size.width / 2, size.height / 2);
